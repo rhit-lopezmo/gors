@@ -1,5 +1,7 @@
 package game
 
+import "image/color"
+
 const (
 	FPS = 60
 
@@ -11,7 +13,7 @@ const (
 	AUDIO_BUFFER_CAPACITY = (AUDIO_SAMPLE_RATE * AUDIO_CHANNELS) / FPS
 )
 
-var displayBuffer = make([]uint32, DISPLAY_WIDTH*DISPLAY_HEIGHT)
+var displayBuffer = make([]color.RGBA, DISPLAY_WIDTH*DISPLAY_HEIGHT)
 var audioBuffer = make([]int16, AUDIO_BUFFER_CAPACITY)
 
 func NewGame() *Game {
@@ -34,6 +36,10 @@ func (game *Game) Update() {
 	// TODO: implement
 
 	// update pixels
+
+	for i := range 100 {
+		game.Display.Buffer[i] = color.RGBA{255, 255, 255, 255}
+	}
 
 	// update audio
 }

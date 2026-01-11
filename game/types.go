@@ -1,7 +1,9 @@
 package game
 
+import "image/color"
+
 type display struct {
-	Buffer []uint32
+	Buffer []color.RGBA
 	Width  int
 	Height int
 }
