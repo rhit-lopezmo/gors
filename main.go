@@ -23,17 +23,22 @@ func main() {
 
 	rl.SetTraceLogLevel(rl.LogWarning)
 	rl.InitWindow(int32(game.Display.Width), int32(game.Display.Height), "Game")
+	rl.SetWindowSize(game.Display.Width, game.Display.Height)
+	rl.SetWindowMinSize(game.Display.Width, game.Display.Height)
 	defer rl.CloseWindow()
 
 	rl.SetTargetFPS(int32(game.Fps))
 
 	displayBufferPtr := unsafe.Pointer(&game.Display.Buffer[0])
-	displayBufferAsBytes := unsafe.Slice((*byte)(displayBufferPtr), len(game.Display.Buffer))
+	displayBufferAsBytes := unsafe.Slice(
+		(*byte)(displayBufferPtr),
+		uintptr(len(game.Display.Buffer))*unsafe.Sizeof(game.Display.Buffer[0]),
+	)
 
 	img := rl.NewImage(
 		displayBufferAsBytes,
-		int32(game.Display.Height),
 		int32(game.Display.Width),
+		int32(game.Display.Height),
 		1,
 		rl.UncompressedR8g8b8a8,
 	)
@@ -58,21 +63,17 @@ func main() {
 				float32(tex.Width),
 				float32(tex.Height),
 			),
-
 			// DEST: entire window (screen space)
 			rl.NewRectangle(
 				0,
 				0,
-				float32(rl.GetScreenWidth()), // do this so we can change window size
-				float32(rl.GetScreenHeight()),
+				float32(game.Display.Width),
+				float32(game.Display.Height),
 			),
-
 			// ORIGIN: top-left
 			rl.NewVector2(0, 0),
-
 			// ROTATION
 			0,
-
 			// TINT
 			rl.White,
 		)

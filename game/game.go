@@ -17,6 +17,11 @@ var displayBuffer = make([]color.RGBA, DISPLAY_WIDTH*DISPLAY_HEIGHT)
 var audioBuffer = make([]int16, AUDIO_BUFFER_CAPACITY)
 
 func NewGame() *Game {
+	for i := range len(displayBuffer) {
+		// fill with red
+		setPixelFromHex(&displayBuffer[i], 0xFF0000FF)
+	}
+
 	return &Game{
 		Fps: FPS,
 		Display: display{
@@ -33,13 +38,7 @@ func NewGame() *Game {
 }
 
 func (game *Game) Update() {
-	// TODO: implement
-
 	// update pixels
-
-	for i := range 100 {
-		game.Display.Buffer[i] = color.RGBA{255, 255, 255, 255}
-	}
 
 	// update audio
 }
@@ -50,4 +49,24 @@ func (game *Game) KeyUp(key int) {
 
 func (game *Game) KeyDown(key int) {
 	// TODO: implement
+}
+
+// rgbaFromHex converts a hex color to a color.RGBA struct
+//
+// hex must either be a 6-digit hex color (0xRRGGBB) or 8-digit hex color (0xRRGGBBAA)
+func setPixelFromHex(pixel *color.RGBA, hex uint32) {
+	// if no alpha present, default to 100%
+	if hex <= 0xFFFFFF {
+		pixel.R = uint8(hex >> 16)
+		pixel.G = uint8(hex >> 8)
+		pixel.B = uint8(hex)
+		pixel.A = 0xFF
+		return
+	}
+
+	// with alpha
+	pixel.R = uint8(hex >> 24)
+	pixel.G = uint8(hex >> 16)
+	pixel.B = uint8(hex >> 8)
+	pixel.A = uint8(hex)
 }
