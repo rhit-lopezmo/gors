@@ -19,7 +19,7 @@ var audioBuffer = make([]int16, AUDIO_BUFFER_CAPACITY)
 func NewGame() *Game {
 	for i := range len(displayBuffer) {
 		// fill with red
-		setPixelFromHex(&displayBuffer[i], 0xFF0000FF)
+		setPixelColorFromHex(&displayBuffer[i], 0x000000)
 	}
 
 	return &Game{
@@ -51,10 +51,10 @@ func (game *Game) KeyDown(key int) {
 	// TODO: implement
 }
 
-// rgbaFromHex converts a hex color to a color.RGBA struct
+// setPixelColorFromHex sets the pixel color from a 32-bit hex value
 //
 // hex must either be a 6-digit hex color (0xRRGGBB) or 8-digit hex color (0xRRGGBBAA)
-func setPixelFromHex(pixel *color.RGBA, hex uint32) {
+func setPixelColorFromHex(pixel *color.RGBA, hex uint32) {
 	// if no alpha present, default to 100%
 	if hex <= 0xFFFFFF {
 		pixel.R = uint8(hex >> 16)
